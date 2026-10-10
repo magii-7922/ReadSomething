@@ -41,7 +41,7 @@ export type EventRating = (typeof EVENT_RATINGS)[number];
 export type Category = "book" | "movie" | "game" | "event";
 
 export const CATEGORY_LABELS: Record<Category, string> = {
-  book: "書",
+  book: "書籍",
   movie: "電影",
   game: "遊戲",
   event: "活動",
