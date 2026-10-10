@@ -2,20 +2,20 @@
 
 :root,
 html[data-theme="day"] {
-  --bg: #e4e0f4;
-  --bg-deep: #c5d4f0;
-  --paper: #f2f0fa;
-  --panel: rgba(242, 240, 250, 0.78);
-  --field: rgba(245, 247, 255, 0.78);
-  --ink: #2a2a4e;
-  --muted: #6a7098;
-  --accent: #6a6fd4;
-  --accent-soft: rgba(106, 111, 212, 0.15);
-  --line: rgba(90, 95, 160, 0.18);
+  --bg: #9aa3d4;
+  --bg-deep: #6f7fbf;
+  --paper: #d8d6ec;
+  --panel: rgba(210, 208, 232, 0.78);
+  --field: rgba(218, 220, 240, 0.78);
+  --ink: #1e1f3d;
+  --muted: #4f5578;
+  --accent: #5a5fc4;
+  --accent-soft: rgba(90, 95, 196, 0.18);
+  --line: rgba(50, 55, 110, 0.22);
   --danger: #c45c6a;
-  --checked: #5b8fd9;
-  --header-bg: rgba(232, 234, 250, 0.72);
-  --shadow: 0 18px 40px rgba(90, 95, 160, 0.12);
+  --checked: #4a7ec8;
+  --header-bg: rgba(170, 175, 215, 0.72);
+  --shadow: 0 18px 40px rgba(50, 55, 110, 0.18);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
 }
@@ -63,10 +63,15 @@ body {
 }
 
 html[data-theme="day"] body {
-  background:
-    radial-gradient(ellipse at 28% 10%, #e8e0ff 0%, transparent 42%),
-    radial-gradient(circle at 88% 72%, rgba(170, 200, 245, 0.6), transparent 48%),
-    linear-gradient(165deg, #e6e2f6, #cfdcf5 55%, #b9cceb);
+  /* Fixed to viewport so long pages don't show a mid-document gradient seam */
+  background-color: #7f8bc4;
+  background-image:
+    radial-gradient(ellipse at 22% 8%, rgba(170, 150, 220, 0.55), transparent 50%),
+    radial-gradient(ellipse at 88% 78%, rgba(110, 150, 210, 0.5), transparent 55%),
+    linear-gradient(180deg, #a8a0d0 0%, #8a96c8 45%, #6f86b8 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 a {
