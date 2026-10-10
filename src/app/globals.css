@@ -137,8 +137,15 @@ select {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem 1rem;
   font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .site-nav {
+    justify-content: flex-start;
+  }
 }
 
 .site-nav a:hover,
