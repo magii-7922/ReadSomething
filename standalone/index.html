@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="day">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>手賬評記｜書評・影評・遊戲評・活動評</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root, html[data-theme="day"] {
+      --bg: #dfe8e2; --bg-deep: #cfdcd4; --paper: #f2f7f3; --ink: #1b2e2a;
+      --muted: #5a726a; --accent: #1f6f6a; --accent-soft: rgba(31,111,106,.12);
+      --line: rgba(27,46,42,.14); --danger: #a33b3b; --header-bg: rgba(242,247,243,.86);
+      --shadow: 0 18px 40px rgba(27,46,42,.08);
+      --c-book: #1f6f6a; --c-movie: #c45c6a; --c-game: #5a8f4a; --c-event: #c4a035;
+    }
+    html[data-theme="night"] {
+      --bg: #0b1220; --bg-deep: #071018; --paper: rgba(16,28,46,.9); --ink: #e4eef7;
+      --muted: #9bb0c4; --accent: #7eb8c9; --accent-soft: rgba(126,184,201,.16);
+      --line: rgba(228,238,247,.14); --danger: #e07878; --header-bg: rgba(11,18,32,.86);
+      --shadow: 0 18px 40px rgba(0,0,0,.35);
+      --c-book: #3d9a93; --c-movie: #d67a87; --c-game: #7aad6a; --c-event: #d4b04a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--ink);
+      font-family: "Noto Sans TC", sans-serif;
+      background: radial-gradient(circle at top left, var(--bg-deep), transparent 40%),
+        linear-gradient(160deg, var(--bg), var(--bg-deep));
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    .header {
+      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px);
+      background: var(--header-bg); border-bottom: 1px solid var(--line);
+    }
+    .header-inner {
+      max-width: 1100px; margin: 0 auto; padding: .9rem 1.25rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem;
+    }
+    .brand { font-family: "Noto Serif TC", serif; font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; cursor: pointer; border: 0; background: none; color: inherit; }
+    .nav { display: flex; flex-wrap: wrap; gap: .55rem .85rem; align-items: center; font-size: .92rem; }
+    .nav button, .theme-btn {
+      border: 0; background: none; color: inherit; cursor: pointer; padding: 0;
+    }
+    .nav button:hover, .theme-btn:hover { color: var(--accent); }
+    .theme-btn {
+      border: 1px solid var(--line); background: var(--accent-soft);
+      padding: .3rem .7rem; border-radius: 999px;
+    }
+    .page { width: min(1100px, calc(100% - 2rem)); margin: 0 auto; padding: 1.5rem 0 3rem; }
+    .hero { font-family: "Noto Serif TC", serif; font-size: clamp(2rem, 6vw, 3.4rem); margin: .2rem 0 .5rem; }
+    .lead { color: var(--muted); max-width: 36rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0 1.4rem; }
+    .btn, .ghost {
+      border-radius: 999px; padding: .5rem 1rem; cursor: pointer; border: 1px solid transparent;
+    }
+    .btn { background: var(--accent); color: #fff; border-color: var(--accent); }
+    html[data-theme="night"] .btn { color: #0b1220; }
+    .ghost { background: transparent; border-color: var(--line); color: var(--ink); }
+    .ghost.danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
+    .panel {
+      background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow);
+      padding: 1.1rem 1.2rem 1.3rem; border-radius: 4px; margin-bottom: 1rem;
+    }
+    .panel h2 { margin: 0; font-family: "Noto Serif TC", serif; font-size: 1.2rem; }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; gap: .75rem; margin-bottom: .8rem; flex-wrap: wrap; }
+    .home-grid { display: grid; gap: 1rem; }
+    @media (min-width: 900px) {
+      .home-grid { grid-template-columns: 1.2fr .8fr; align-items: start; }
+    }
+    .muted { color: var(--muted); }
+    .segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+    .segmented button { border: 0; background: transparent; color: var(--muted); padding: .3rem .7rem; cursor: pointer; }
+    .segmented button.active { background: var(--accent); color: #fff; }
+    html[data-theme="night"] .segmented button.active { color: #0b1220; }
+    .legend { display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .82rem; margin-bottom: .5rem; }
+    .legend i { width: .7rem; height: .7rem; border-radius: 50%; display: inline-block; margin-right: .3rem; vertical-align: middle; }
+    .cal-nav { display: flex; justify-content: space-between; align-items: center; margin: .5rem 0 .75rem; }
+    .cal-nav button { width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid var(--line); background: transparent; cursor: pointer; color: var(--ink); }
+    .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .35rem; }
+    .weekday { text-align: center; font-size: .75rem; color: var(--muted); }
+    .day-cell {
+      aspect-ratio: 1; border: 0; border-radius: 50%; background: transparent; color: inherit;
+      display: grid; place-items: center; cursor: pointer; font-size: .9rem; padding: 0;
+    }
+    .day-cell.today { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .day-cell:disabled { cursor: default; }
+    .year-list { display: grid; gap: .85rem; }
+    .year-month h3 { margin: 0 0 .35rem; font-size: .95rem; font-family: "Noto Serif TC", serif; }
+    .dots { display: flex; flex-wrap: wrap; gap: 5px; }
+    .dot {
+      width: 11px; height: 11px; border-radius: 50%; border: 0; padding: 0; background: var(--line); cursor: pointer;
+    }
+    .dot.today { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .menu {
+      position: fixed; z-index: 50; min-width: 170px; background: var(--paper);
+      border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: 8px; padding: .45rem;
+    }
+    .menu-item {
+      display: grid; grid-template-columns: .75rem 1fr auto; gap: .5rem; align-items: center;
+      width: 100%; border: 0; background: transparent; color: inherit; text-align: left;
+      padding: .5rem .55rem; border-radius: 6px; cursor: pointer;
+    }
+    .menu-item:hover, .menu-item.on { background: var(--accent-soft); }
+    .menu-item i { width: .75rem; height: .75rem; border-radius: 50%; }
+    .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: .7rem 0; }
+    .chip {
+      border: 1px solid var(--line); background: transparent; color: inherit;
+      padding: .3rem .65rem; border-radius: 999px; cursor: pointer; font-size: .85rem;
+    }
+    .chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    html[data-theme="night"] .chip.active { color: #0b1220; }
+    .list { display: grid; gap: .7rem; }
+    .item {
+      background: var(--paper); border: 1px solid var(--line); border-radius: 4px;
+      padding: .9rem 1rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem;
+    }
+    .item h3 { margin: 0 0 .3rem; font-family: "Noto Serif TC", serif; font-size: 1.1rem; cursor: pointer; }
+    .meta { color: var(--muted); font-size: .88rem; display: flex; flex-wrap: wrap; gap: .35rem .8rem; }
+    .item-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .form { display: grid; gap: .8rem; }
+    .form label { display: grid; gap: .3rem; font-size: .92rem; }
+    .form input, .form textarea, .form select {
+      width: 100%; border: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 70%, transparent);
+      color: var(--ink); padding: .6rem .7rem; border-radius: 4px;
+    }
+    .form fieldset { border: 1px solid var(--line); border-radius: 4px; padding: .7rem; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .tag { border: 1px solid var(--line); border-radius: 999px; padding: .2rem .55rem; background: transparent; cursor: pointer; font-size: .82rem; }
+    .wish-hint { font-size: .8rem; margin: 0 0 .5rem; }
+    .wish-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+    .wish-row { position: relative; overflow: hidden; border-bottom: 1px dashed var(--line); }
+    .wish-row-content {
+      background: var(--paper); padding: .65rem .5rem; display: flex; flex-wrap: wrap; gap: .35rem .7rem;
+      transition: transform .15s ease; touch-action: pan-y; user-select: none; cursor: grab;
+    }
+    .struck { text-decoration: line-through; color: var(--muted); }
+    .wish-empty { background: none; border: 0; color: var(--muted); cursor: pointer; padding: .3rem 0; text-align: left; }
+    .wish-empty:hover { color: var(--accent); text-decoration: underline; }
+    .detail-body { white-space: pre-wrap; line-height: 1.8; margin: 1rem 0; }
+    .excerpt { border-left: 3px solid var(--accent); padding-left: .8rem; color: var(--muted); font-style: italic; }
+    .photos { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
+    .photos img { max-width: 180px; max-height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); }
+    .writing {
+      position: relative; background: var(--paper); border: 1px solid var(--line);
+      box-shadow: var(--shadow); padding: 1.2rem; border-radius: 2px;
+      background-image: radial-gradient(var(--line) 1.1px, transparent 1.1px);
+      background-size: 16px 16px;
+    }
+    html[data-theme="night"] .writing {
+      background-image: none;
+      background-color: var(--paper);
+    }
+    .hidden { display: none !important; }
+    .toast {
+      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+      background: var(--ink); color: var(--paper); padding: .55rem 1rem; border-radius: 999px;
+      font-size: .88rem; z-index: 60; opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .toast.show { opacity: 1; }
+    .login-box { max-width: 400px; margin: 2rem auto; }
+    .section-title { font-family: "Noto Serif TC", serif; font-size: clamp(1.6rem, 4vw, 2.2rem); margin: 0; }
+    .pin-bar { display: flex; gap: .5rem; margin-top: .5rem; }
+    .config-note {
+      background: var(--accent-soft); border: 1px dashed var(--accent);
+      padding: .7rem 1rem; border-radius: 4px; font-size: .9rem; margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <button class="brand" type="button" data-go="home">手賬評記</button>
+      <nav class="nav" id="nav">
+        <button type="button" data-go="books">書評</button>
+        <button type="button" data-go="movies">影評</button>
+        <button type="button" data-go="games">遊戲評</button>
+        <button type="button" data-go="events">活動評</button>
+        <button type="button" data-go="drafts" class="owner-only hidden">草稿箱</button>
+        <button type="button" id="authBtn">登入</button>
+        <button type="button" class="theme-btn" id="themeBtn">夜空</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page" id="app"></main>
+  <div class="toast" id="toast"></div>
+  <div id="menuRoot"></div>
+
+  <script>
+    const STORAGE_KEY = "shouzhang-review-v1";
+    const PIN_KEY = "shouzhang-owner-pin";
+    const THEME_KEY = "shouzhang-theme";
+
+    const BOOK_RATINGS = ["超級推薦！","有棒的地方","中規中矩","能理解但為什麼","WTF","我是土狗"];
+    const MOVIE_RATINGS = ["超級推薦！","有棒的地方","中規中矩","能理解但為什麼","WTF","商業片"];
+    const GAME_RATINGS = ["人生遊戲！","挺好玩的","偶爾開開","不好玩","可惜我是手殘"];
+    const EVENT_RATINGS = ["人生必去！","陶冶性情","挺好玩的","中規中矩","主辦在幹嘛","FFXIV"];
+
+    const CATS = {
+      book: { label: "書評", path: "books", ratings: BOOK_RATINGS, checkLabel: "看書", color: "var(--c-book)", dateLabel: "閱讀日期",
+        fields: [
+          ["title","書名",true],["author","作者"],["publisher","出版社／連載網站"],["link","連結（選填）"],
+          ["experience_date","閱讀日期","date"],["review","書評","textarea",true],["excerpt","摘錄句子","textarea"]
+        ]},
+      movie: { label: "影評", path: "movies", ratings: MOVIE_RATINGS, checkLabel: "看電影", color: "var(--c-movie)", dateLabel: "觀看日期",
+        fields: [
+          ["title","作品名",true],["director","導演"],["studio","片商"],["original_work","原著"],
+          ["experience_date","觀看日期","date"],["review","影評","textarea",true],["excerpt","摘錄句子","textarea"],["photos","票根／照片","file"]
+        ]},
+      game: { label: "遊戲評", path: "games", ratings: GAME_RATINGS, checkLabel: "玩遊戲", color: "var(--c-game)", dateLabel: "遊玩日期",
+        fields: [
+          ["title","作品名",true],["company","遊戲公司"],["publisher","出版商／網站"],["price","價格"],
+          ["experience_date","遊玩日期","date"],["review","評價","textarea",true],["photos","截圖","file"]
+        ]},
+      event: { label: "活動評", path: "events", ratings: EVENT_RATINGS, checkLabel: "參加活動", color: "var(--c-event)", dateLabel: "參加日期",
+        fields: [
+          ["title","活動名",true],["organizer","主辦"],["location","地點"],["ticket_price","票價"],
+          ["experience_date","參加日期","date"],["review","評價","textarea",true],["photos","照片","file"]
+        ]},
+    };
+    const CAT_KEYS = ["book","movie","game","event"];
+
+    const state = {
+      route: { name: "home" },
+      owner: false,
+      data: loadData(),
+      calMode: "month",
+      calCursor: new Date(),
+      wishAdding: {},
+    };
+
+    function uid() { return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random(); }
+    function todayISO() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    }
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch {}
+      return {
+        checkIns: {}, // date -> [cats]
+        wishes: [],
+        reviews: { book: [], movie: [], game: [], event: [] },
+        drafts: [],
+        pinHash: null,
+      };
+    }
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+    }
+    function toast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2200);
+    }
+    async function hashPin(pin) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("shouzhang:" + pin));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+    }
+
+    function pieBg(cats) {
+      const list = CAT_KEYS.filter(c => (cats || []).includes(c));
+      if (!list.length) return "";
+      const colors = { book: "var(--c-book)", movie: "var(--c-movie)", game: "var(--c-game)", event: "var(--c-event)" };
+      if (list.length === 1) return colors[list[0]];
+      const slice = 360 / list.length;
+      return `conic-gradient(${list.map((c,i)=>`${colors[c]} ${i*slice}deg ${(i+1)*slice}deg`).join(",")})`;
+    }
+
+    function setTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem(THEME_KEY, theme);
+      document.getElementById("themeBtn").textContent = theme === "day" ? "夜空" : "日間";
+    }
+
+    function go(name, params = {}) {
+      state.route = { name, ...params };
+      closeMenu();
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    function ownerOnly(html) {
+      return state.owner ? html : "";
+    }
+
+    function sortWishes(items) {
+      const by = (a,b) => a.created_at.localeCompare(b.created_at);
+      return [...items.filter(i=>!i.is_done).sort(by), ...items.filter(i=>i.is_done).sort(by)];
+    }
+
+    /* -------- Views -------- */
+    function viewHome() {
+      return `
+        <div class="config-note">這是單檔版：資料存在本機瀏覽器。可用下方「匯出／匯入」備份。若要雲端同步請用 Next.js + Supabase 專案。</div>
+        <p class="muted">個人評論手賬</p>
+        <h1 class="hero">手賬評記</h1>
+        <p class="lead">記錄書、電影、遊戲與活動。打卡可分色；願望清單右滑撰寫、左滑刪除。</p>
+        <div class="actions">
+          ${CAT_KEYS.map((c,i)=>`<button class="${i===0?"btn":"ghost"}" type="button" data-go="${CATS[c].path}">${CATS[c].label}</button>`).join("")}
+        </div>
+        <div class="home-grid">
+          ${renderCheckIn()}
+          <div>${CAT_KEYS.map(c => renderWish(c, true)).join("")}</div>
+        </div>
+        ${ownerOnly(`
+          <div class="panel">
+            <div class="panel-head"><h2>資料備份</h2></div>
+            <div class="actions">
+              <button class="btn" type="button" id="exportBtn">匯出 JSON</button>
+              <label class="ghost" style="display:inline-flex;align-items:center;cursor:pointer">
+                匯入 JSON<input type="file" id="importFile" accept="application/json" hidden />
+              </label>
+            </div>
+          </div>
+        `)}
+      `;
+    }
+
+    function renderCheckIn() {
+      const year = state.calCursor.getFullYear();
+      const month = state.calCursor.getMonth();
+      const checks = state.data.checkIns;
+      let body = "";
+      if (state.calMode === "month") {
+        const first = new Date(year, month, 1);
+        const pad = (first.getDay() + 6) % 7;
+        const days = new Date(year, month + 1, 0).getDate();
+        const cells = [];
+        for (let i=0;i<pad;i++) cells.push(`<div class="day-cell"></div>`);
+        for (let d=1;d<=days;d++) {
+          const date = `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+          const bg = pieBg(checks[date]);
+          const style = bg ? `style="background:${bg};color:#fff"` : "";
+          const today = date === todayISO() ? "today" : "";
+          cells.push(`<button type="button" class="day-cell ${today}" data-check="${date}" ${style} ${state.owner?"":"disabled"}>${d}</button>`);
+        }
+        body = `<div class="month-grid">${["一","二","三","四","五","六","日"].map(w=>`<div class="weekday">${w}</div>`).join("")}${cells.join("")}</div>`;
+      } else {
+        body = `<div class="year-list">${Array.from({length:12},(_,m)=>{
+          const dim = new Date(year,m+1,0).getDate();
+          let checked = 0;
+          const dots = Array.from({length:dim},(_,i)=>{
+            const d=i+1;
+            const date=`${year}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+            const cats = checks[date]||[];
+            if (cats.length) checked++;
+            const bg = pieBg(cats);
+            const style = bg ? `style="background:${bg}"` : "";
+            return `<button type="button" class="dot ${date===todayISO()?"today":""}" data-check="${date}" ${style} ${state.owner?"":"disabled"} title="${date}"></button>`;
+          }).join("");
+          return `<div class="year-month"><div class="panel-head"><h3>${m+1} 月</h3><span class="muted">${checked}/${dim}</span></div><div class="dots">${dots}</div></div>`;
+        }).join("")}</div>`;
+      }
+      return `
+        <section class="panel">
+          <div class="panel-head">
+            <h2>打卡表</h2>
+            <div class="segmented">
+              <button type="button" class="${state.calMode==="month"?"active":""}" data-calmode="month">一個月</button>
+              <button type="button" class="${state.calMode==="year"?"active":""}" data-calmode="year">一整年</button>
+            </div>
+          </div>
+          <div class="legend">${CAT_KEYS.map(c=>`<span><i style="background:${CATS[c].color}"></i>${CATS[c].checkLabel}</span>`).join("")}</div>
+          ${state.owner?`<p class="muted wish-hint">電腦點擊／手機長按選擇類型</p>`:""}
+          <div class="cal-nav">
+            <button type="button" data-calshift="-1">‹</button>
+            <strong>${state.calMode==="month"?`${year} 年 ${month+1} 月`:`${year} 年`}</strong>
+            <button type="button" data-calshift="1">›</button>
+          </div>
+          ${body}
+        </section>`;
+    }
+
+    function renderWish(cat, compact) {
+      const items = sortWishes(state.data.wishes.filter(w => w.category === cat));
+      const open = items.filter(i => !i.is_done);
+      const shown = compact ? open.slice(0,5) : items;
+      const adding = !!state.wishAdding[cat];
+      return `
+        <section class="panel" data-wishcat="${cat}">
+          <div class="panel-head">
+            <h2>${CATS[cat].label}願望清單 ${compact?`<button class="ghost" type="button" data-go="${CATS[cat].path}-wish" style="font-size:.85rem;padding:.2rem .6rem">查看全部</button>`:""}</h2>
+          </div>
+          ${state.owner && open.length ? `<p class="muted wish-hint">右滑撰寫・左滑刪除</p>` : ""}
+          <ul class="wish-list">
+            ${shown.length === 0 && !adding ? `
+              <li>${state.owner
+                ? `<button type="button" class="wish-empty" data-wish-add="${cat}">還沒有想看／想玩的作品</button>`
+                : `<span class="muted">還沒有想看／想玩的作品</span>`}</li>` : ""}
+            ${shown.map(item => `
+              <li class="wish-row ${item.is_done?"":"swipeable"}" data-wish-id="${item.id}">
+                <div class="wish-row-content">
+                  <span class="${item.is_done?"struck":""}">${esc(item.title)}</span>
+                  ${item.note?`<span class="muted">${esc(item.note)}</span>`:""}
+                </div>
+              </li>`).join("")}
+          </ul>
+          ${state.owner && shown.length && !adding ? `<button type="button" class="wish-empty" data-wish-add="${cat}">＋新增願望</button>` : ""}
+          ${state.owner && adding ? `
+            <form class="form wish-form" data-wish-form="${cat}">
+              <input name="title" placeholder="作品名稱" required />
+              <input name="note" placeholder="備註（選填）" />
+              <div class="actions">
+                <button class="btn" type="submit">加入清單</button>
+                <button class="ghost" type="button" data-wish-cancel="${cat}">取消</button>
+              </div>
+            </form>` : ""}
+        </section>`;
+    }
+
+    function viewList(cat, ratingFilter, tagFilter) {
+      const cfg = CATS[cat];
+      let list = [...state.data.reviews[cat]].sort((a,b)=>b.created_at.localeCompare(a.created_at));
+      if (ratingFilter) list = list.filter(r => r.rating === ratingFilter);
+      if (tagFilter) list = list.filter(r => (r.tags||[]).includes(tagFilter));
+      const tags = [...new Set(state.data.reviews[cat].flatMap(r => r.tags||[]))].sort();
+      return `
+        <div class="panel-head">
+          <h1 class="section-title">${cfg.label}${ratingFilter?`・${esc(ratingFilter)}`:""}</h1>
+          <div class="actions">
+            <button class="ghost" type="button" data-go="${cfg.path}-wish">願望清單</button>
+            ${ownerOnly(`<button class="btn" type="button" data-go="${cfg.path}-new">撰寫${cfg.label}</button>`)}
+          </div>
+        </div>
+        <div class="chips">
+          <button type="button" class="chip ${!ratingFilter?"active":""}" data-go="${cfg.path}">全部</button>
+          ${cfg.ratings.map(r=>`<button type="button" class="chip ${ratingFilter===r?"active":""}" data-go="${cfg.path}-rating" data-rating="${escAttr(r)}">${esc(r)}</button>`).join("")}
+        </div>
+        ${tags.length?`<div class="chips">${tags.map(t=>`<button type="button" class="chip ${tagFilter===t?"active":""}" data-go="${cfg.path}" data-tag="${escAttr(t)}">#${esc(t)}</button>`).join("")}</div>`:""}
+        <div class="list">
+          ${list.length===0?`<p class="muted">還沒有內容。</p>`:list.map(r=>`
+            <article class="item">
+              <div>
+                <h3 data-go="${cfg.path}-detail" data-id="${r.id}">${esc(r.title)}</h3>
+                <div class="meta">
+                  ${r.experience_date?`<span>${cfg.dateLabel}：${r.experience_date}</span>`:""}
+                  <span>${esc(r.rating)}</span>
+                  ${(r.tags||[]).map(t=>`<span>#${esc(t)}</span>`).join("")}
+                </div>
+              </div>
+              ${ownerOnly(`<div class="item-actions">
+                <button class="ghost" type="button" data-go="${cfg.path}-edit" data-id="${r.id}">編輯</button>
+                <button class="ghost danger" type="button" data-del-review="${cat}:${r.id}">刪除</button>
+              </div>`)}
+            </article>`).join("")}
+        </div>`;
+    }
+
+    function viewDetail(cat, id) {
+      const cfg = CATS[cat];
+      const r = state.data.reviews[cat].find(x => x.id === id);
+      if (!r) return `<p class="muted">找不到這篇。</p>`;
+      return `
+        <article class="panel">
+          <div class="panel-head">
+            <h1 class="section-title">${esc(r.title)}</h1>
+            <div class="actions">
+              <button class="chip active" type="button" data-go="${cfg.path}-rating" data-rating="${escAttr(r.rating)}">${esc(r.rating)}</button>
+              ${ownerOnly(`
+                <button class="ghost" type="button" data-go="${cfg.path}-edit" data-id="${r.id}">編輯</button>
+                <button class="ghost danger" type="button" data-del-review="${cat}:${r.id}">刪除</button>
+              `)}
+            </div>
+          </div>
+          <div class="meta">${metaLines(cat,r).map(x=>`<span>${x}</span>`).join("")}</div>
+          ${(r.tags||[]).length?`<div class="tag-row" style="margin-top:.7rem">${r.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`:""}
+          <div class="detail-body">${esc(r.review)}</div>
+          ${r.excerpt?`<blockquote class="excerpt">${esc(r.excerpt)}</blockquote>`:""}
+          ${(r.photos||[]).length?`<div class="photos">${r.photos.map(src=>`<img src="${src}" alt="" />`).join("")}</div>`:""}
+          <div class="actions" style="margin-top:1rem"><button class="ghost" type="button" data-go="${cfg.path}">返回列表</button></div>
+        </article>`;
+    }
+
+    function metaLines(cat, r) {
+      if (cat==="book") return [`作者：${r.author||"—"}`,`出版社／連載：${r.publisher||"—"}`,`閱讀日期：${r.experience_date||"—"}`];
+      if (cat==="movie") return [`導演：${r.director||"—"}`,`片商：${r.studio||"—"}`,`原著：${r.original_work||"—"}`,`觀看日期：${r.experience_date||"—"}`];
+      if (cat==="game") return [`遊戲公司：${r.company||"—"}`,`出版商／網站：${r.publisher||"—"}`,`價格：${r.price||"—"}`,`遊玩日期：${r.experience_date||"—"}`];
+      return [`主辦：${r.organizer||"—"}`,`地點：${r.location||"—"}`,`票價：${r.ticket_price||"—"}`,`參加日期：${r.experience_date||"—"}`];
+    }
+
+    function viewForm(cat, mode, id, draftId, prefillTitle) {
+      const cfg = CATS[cat];
+      let initial = { title: prefillTitle || "", tags: [], rating: cfg.ratings[0], photos: [] };
+      if (mode === "edit" && id) Object.assign(initial, state.data.reviews[cat].find(x=>x.id===id) || {});
+      if (draftId) {
+        const d = state.data.drafts.find(x=>x.id===draftId);
+        if (d) Object.assign(initial, d.payload || {}, { title: d.title || (d.payload&&d.payload.title) || "" });
+      }
+      return `
+        <div class="writing">
+          <h1 class="section-title">${mode==="edit"?"編輯":"撰寫"}${cfg.label}</h1>
+          <form class="form" id="reviewForm" data-cat="${cat}" data-mode="${mode}" data-id="${id||""}" data-draft="${draftId||""}">
+            ${cfg.fields.map(([key,label,typeOrReq,maybeReq])=>{
+              const required = typeOrReq===true || maybeReq===true;
+              const type = typeof typeOrReq==="string" ? typeOrReq : "text";
+              if (type==="textarea") return `<label>${label}<textarea name="${key}" rows="${key==="review"?10:4}" ${required?"required":""}>${esc(initial[key]||"")}</textarea></label>`;
+              if (type==="file") return `<label>${label}<input type="file" name="photos" accept="image/*" multiple />${(initial.photos||[]).length?`<div class="photos" id="photoPreview">${initial.photos.map(s=>`<img src="${s}" />`).join("")}</div>`:`<div class="photos" id="photoPreview"></div>`}</label>`;
+              if (type==="date") return `<label>${label}<input type="date" name="${key}" value="${escAttr(initial[key]||"")}" /></label>`;
+              return `<label>${label}<input name="${key}" value="${escAttr(initial[key]||"")}" ${required?"required":""} ${key==="link"?'type="url" placeholder="https://"':""} /></label>`;
+            }).join("")}
+            <fieldset>
+              <legend>評分</legend>
+              <div class="chips" id="ratingChips">
+                ${cfg.ratings.map(r=>`<button type="button" class="chip ${initial.rating===r?"active":""}" data-set-rating="${escAttr(r)}">${esc(r)}</button>`).join("")}
+              </div>
+              <input type="hidden" name="rating" value="${escAttr(initial.rating)}" />
+            </fieldset>
+            <label>自訂標籤
+              <div class="tag-row" id="tagRow">${(initial.tags||[]).map(t=>`<button type="button" class="tag" data-rm-tag="${escAttr(t)}">${esc(t)} ×</button>`).join("")}</div>
+              <div class="actions" style="margin-top:.4rem">
+                <input id="tagInput" placeholder="標籤，Enter 新增" />
+                <button type="button" class="ghost" id="tagAdd">新增</button>
+              </div>
+              <input type="hidden" name="tags" value="${escAttr((initial.tags||[]).join(","))}" />
+            </label>
+            <div class="actions">
+              <button class="btn" type="submit">儲存${cfg.label}</button>
+              ${mode==="create"?`<button class="ghost" type="button" id="saveDraft">存草稿</button>`:""}
+              <button class="ghost" type="button" data-go="${cfg.path}">取消</button>
+            </div>
+          </form>
+        </div>`;
+    }
+
+    function viewDrafts() {
+      const list = [...state.data.drafts].sort((a,b)=>b.updated_at.localeCompare(a.updated_at));
+      return `
+        <div class="panel-head"><h1 class="section-title">草稿箱</h1></div>
+        <div class="list">
+          ${list.length===0?`<p class="muted">目前沒有草稿。</p>`:list.map(d=>`
+            <article class="item">
+              <div>
+                <h3>${esc(d.title||"未命名草稿")}</h3>
+                <div class="meta"><span>${CATS[d.category].label}</span><span>更新於 ${new Date(d.updated_at).toLocaleString("zh-TW")}</span></div>
+              </div>
+              <div class="item-actions">
+                <button class="btn" type="button" data-go="${CATS[d.category].path}-new" data-draft="${d.id}">繼續寫</button>
+                <button class="ghost danger" type="button" data-del-draft="${d.id}">刪除</button>
+              </div>
+            </article>`).join("")}
+        </div>`;
+    }
+
+    function viewLogin() {
+      const hasPin = !!state.data.pinHash;
+      return `
+        <section class="panel login-box">
+          <h1 class="section-title">${hasPin?"登入編輯":"設定編輯密碼"}</h1>
+          <p class="muted">${hasPin?"輸入你設定的密碼以編輯內容。":"第一次使用請設定一組密碼（存在本機）。"}</p>
+          <form class="form" id="loginForm">
+            <label>密碼<input type="password" name="pin" required minlength="4" autocomplete="current-password" /></label>
+            ${!hasPin?`<label>再輸入一次<input type="password" name="pin2" required minlength="4" /></label>`:""}
+            <button class="btn" type="submit">${hasPin?"登入":"建立密碼並登入"}</button>
+          </form>
+        </section>`;
+    }
+
+    function viewWishPage(cat) {
+      return `
+        <div class="panel-head">
+          <h1 class="section-title">${CATS[cat].label}願望清單</h1>
+          <button class="ghost" type="button" data-go="${CATS[cat].path}">回到${CATS[cat].label}</button>
+        </div>
+        ${renderWish(cat, false)}`;
+    }
+
+    /* -------- Render -------- */
+    function render() {
+      document.querySelectorAll(".owner-only").forEach(el => el.classList.toggle("hidden", !state.owner));
+      const authBtn = document.getElementById("authBtn");
+      authBtn.textContent = state.owner ? "登出" : "登入";
+
+      const r = state.route;
+      let html = "";
+      if (r.name === "home") html = viewHome();
+      else if (r.name === "login") html = viewLogin();
+      else if (r.name === "drafts") html = state.owner ? viewDrafts() : viewLogin();
+      else if (r.name.endsWith("-wish")) html = viewWishPage(r.name.replace("-wish",""));
+      else if (r.name.endsWith("-new")) html = state.owner ? viewForm(catFromPath(r.name), "create", null, r.draft, r.title) : viewLogin();
+      else if (r.name.endsWith("-edit")) html = state.owner ? viewForm(catFromPath(r.name), "edit", r.id) : viewLogin();
+      else if (r.name.endsWith("-detail")) html = viewDetail(catFromPath(r.name), r.id);
+      else if (r.name.endsWith("-rating")) html = viewList(catFromPath(r.name), r.rating);
+      else if (CAT_KEYS.includes(r.name) || ["books","movies","games","events"].includes(r.name)) {
+        const cat = pathToCat(r.name);
+        html = viewList(cat, null, r.tag);
+      } else html = viewHome();
+
+      document.getElementById("app").innerHTML = html;
+      bind();
+    }
+
+    function pathToCat(name) {
+      if (name.startsWith("book")) return "book";
+      if (name.startsWith("movie")) return "movie";
+      if (name.startsWith("game")) return "game";
+      if (name.startsWith("event")) return "event";
+      return name;
+    }
+    function catFromPath(name) {
+      return pathToCat(name.replace(/-wish|-new|-edit|-detail|-rating/g,""));
+    }
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+    function escAttr(s) { return esc(s).replace(/\n/g," "); }
+
+    /* -------- Events -------- */
+    let longPressTimer = null, suppressClick = false;
+
+    function closeMenu() { document.getElementById("menuRoot").innerHTML = ""; }
+
+    function openCheckMenu(date, x, y) {
+      if (!state.owner) return;
+      const cats = state.data.checkIns[date] || [];
+      const menuW = 180, menuH = 220, pad = 8;
+      const left = Math.max(pad, Math.min(x, window.innerWidth - menuW - pad));
+      const top = Math.max(pad, Math.min(y, window.innerHeight - menuH - pad));
+      document.getElementById("menuRoot").innerHTML = `
+        <div class="menu" style="left:${left}px;top:${top}px">
+          <p class="muted" style="margin:.2rem .4rem .4rem;font-size:.78rem">${date}</p>
+          ${CAT_KEYS.map(c=>{
+            const on = cats.includes(c);
+            return `<button type="button" class="menu-item ${on?"on":""}" data-toggle-check="${date}:${c}"><i style="background:${CATS[c].color}"></i><span>${CATS[c].checkLabel}</span><span class="muted">${on?"已打":"未打"}</span></button>`;
+          }).join("")}
+        </div>`;
+    }
+
+    function bind() {
+      document.querySelectorAll("[data-go]").forEach(el => {
+        el.addEventListener("click", () => {
+          const name = el.getAttribute("data-go");
+          const params = {};
+          if (el.dataset.id) params.id = el.dataset.id;
+          if (el.dataset.rating) params.rating = el.dataset.rating;
+          if (el.dataset.tag) params.tag = el.dataset.tag;
+          if (el.dataset.draft) params.draft = el.dataset.draft;
+          if (el.dataset.title) params.title = el.dataset.title;
+          go(name, params);
+        });
+      });
+
+      document.querySelectorAll("[data-calmode]").forEach(btn => {
+        btn.addEventListener("click", () => { state.calMode = btn.dataset.calmode; render(); });
+      });
+      document.querySelectorAll("[data-calshift]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const d = new Date(state.calCursor);
+          const n = Number(btn.dataset.calshift);
+          if (state.calMode === "month") d.setMonth(d.getMonth()+n); else d.setFullYear(d.getFullYear()+n);
+          state.calCursor = d; render();
+        });
+      });
+
+      document.querySelectorAll("[data-check]").forEach(el => {
+        const date = el.dataset.check;
+        el.addEventListener("click", (e) => {
+          if (suppressClick) { suppressClick = false; return; }
+          if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) openCheckMenu(date, e.clientX, e.clientY);
+        });
+        el.addEventListener("contextmenu", e => e.preventDefault());
+        el.addEventListener("pointerdown", (e) => {
+          if (!state.owner || e.button !== 0) return;
+          clearTimeout(longPressTimer);
+          longPressTimer = setTimeout(() => {
+            suppressClick = true;
+            openCheckMenu(date, e.clientX, e.clientY);
+            if (navigator.vibrate) navigator.vibrate(12);
+          }, 480);
+        });
+        el.addEventListener("pointerup", () => clearTimeout(longPressTimer));
+        el.addEventListener("pointerleave", () => clearTimeout(longPressTimer));
+        el.addEventListener("pointercancel", () => clearTimeout(longPressTimer));
+      });
+
+      document.getElementById("menuRoot").onclick = (e) => {
+        const btn = e.target.closest("[data-toggle-check]");
+        if (!btn) return;
+        const [date, cat] = btn.dataset.toggleCheck.split(":");
+        const set = new Set(state.data.checkIns[date] || []);
+        if (set.has(cat)) set.delete(cat); else set.add(cat);
+        if (set.size) state.data.checkIns[date] = CAT_KEYS.filter(c => set.has(c));
+        else delete state.data.checkIns[date];
+        save();
+        toast(`${date} ${CATS[cat].checkLabel}`);
+        render();
+      };
+      document.addEventListener("pointerdown", onDocPointer, { once: false });
+
+      document.querySelectorAll("[data-wish-add]").forEach(btn => {
+        btn.addEventListener("click", () => { state.wishAdding[btn.dataset.wishAdd] = true; render(); });
+      });
+      document.querySelectorAll("[data-wish-cancel]").forEach(btn => {
+        btn.addEventListener("click", () => { state.wishAdding[btn.dataset.wishCancel] = false; render(); });
+      });
+      document.querySelectorAll("[data-wish-form]").forEach(form => {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const cat = form.dataset.wishForm;
+          const fd = new FormData(form);
+          state.data.wishes.push({
+            id: uid(), category: cat, title: String(fd.get("title")).trim(),
+            note: String(fd.get("note")||"").trim(), is_done: false, done_at: null,
+            created_at: new Date().toISOString(),
+          });
+          state.wishAdding[cat] = false;
+          save(); toast("已加入願望清單"); render();
+        });
+      });
+
+      // swipe wishes
+      document.querySelectorAll(".wish-row.swipeable").forEach(row => {
+        const content = row.querySelector(".wish-row-content");
+        let startX=0, startY=0, offset=0, dragging=false, axis=null;
+        content.addEventListener("pointerdown", e => {
+          if (!state.owner) return;
+          dragging = true; axis = null; startX = e.clientX; startY = e.clientY; offset = 0;
+          content.setPointerCapture(e.pointerId);
+        });
+        content.addEventListener("pointermove", e => {
+          if (!dragging) return;
+          const dx = e.clientX - startX, dy = e.clientY - startY;
+          if (!axis) {
+            if (Math.abs(dx)<8 && Math.abs(dy)<8) return;
+            axis = Math.abs(dx)>Math.abs(dy) ? "x" : "y";
+          }
+          if (axis !== "x") return;
+          offset = Math.max(-120, Math.min(120, dx));
+          content.style.transform = `translateX(${offset}px)`;
+        });
+        const end = () => {
+          if (!dragging) return;
+          dragging = false;
+          const id = row.dataset.wishId;
+          const item = state.data.wishes.find(w => w.id === id);
+          if (offset <= -72 && item) {
+            state.data.wishes = state.data.wishes.filter(w => w.id !== id);
+            save(); toast("已刪除"); render(); return;
+          }
+          if (offset >= 72 && item) {
+            item.is_done = true; item.done_at = new Date().toISOString();
+            save();
+            go(CATS[item.category].path + "-new", { title: item.title });
+            return;
+          }
+          content.style.transform = "";
+        };
+        content.addEventListener("pointerup", end);
+        content.addEventListener("pointercancel", end);
+      });
+
+      document.querySelectorAll("[data-del-review]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (!confirm("確定刪除？")) return;
+          const [cat, id] = btn.dataset.delReview.split(":");
+          state.data.reviews[cat] = state.data.reviews[cat].filter(r => r.id !== id);
+          save(); toast("已刪除"); go(CATS[cat].path);
+        });
+      });
+      document.querySelectorAll("[data-del-draft]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (!confirm("刪除草稿？")) return;
+          state.data.drafts = state.data.drafts.filter(d => d.id !== btn.dataset.delDraft);
+          save(); render();
+        });
+      });
+
+      const form = document.getElementById("reviewForm");
+      if (form) bindReviewForm(form);
+
+      const loginForm = document.getElementById("loginForm");
+      if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const fd = new FormData(loginForm);
+          const pin = String(fd.get("pin"));
+          if (!state.data.pinHash) {
+            if (pin !== String(fd.get("pin2"))) { toast("兩次密碼不一致"); return; }
+            state.data.pinHash = await hashPin(pin);
+            save();
+            sessionStorage.setItem(PIN_KEY, "1");
+            state.owner = true;
+            toast("密碼已設定"); go("home");
+          } else {
+            const h = await hashPin(pin);
+            if (h !== state.data.pinHash) { toast("密碼錯誤"); return; }
+            sessionStorage.setItem(PIN_KEY, "1");
+            state.owner = true;
+            toast("已登入"); go("home");
+          }
+        });
+      }
+
+      const exportBtn = document.getElementById("exportBtn");
+      if (exportBtn) exportBtn.addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(state.data, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `shouzhang-backup-${todayISO()}.json`;
+        a.click();
+      });
+      const importFile = document.getElementById("importFile");
+      if (importFile) importFile.addEventListener("change", async () => {
+        const file = importFile.files?.[0];
+        if (!file) return;
+        try {
+          const json = JSON.parse(await file.text());
+          if (!json.reviews || !json.wishes) throw new Error("格式不正確");
+          state.data = { ...loadData(), ...json };
+          save(); toast("匯入成功"); render();
+        } catch (err) { toast("匯入失敗"); }
+      });
+    }
+
+    function onDocPointer(e) {
+      const menu = document.querySelector(".menu");
+      if (menu && !menu.contains(e.target) && !e.target.closest("[data-check]")) closeMenu();
+    }
+
+    function bindReviewForm(form) {
+      let tags = String(form.tags.value || "").split(",").map(s=>s.trim()).filter(Boolean);
+      let photos = [];
+      const preview = document.getElementById("photoPreview");
+      if (preview) photos = [...preview.querySelectorAll("img")].map(img => img.src);
+
+      const refreshTags = () => {
+        document.getElementById("tagRow").innerHTML = tags.map(t=>`<button type="button" class="tag" data-rm-tag="${escAttr(t)}">${esc(t)} ×</button>`).join("");
+        form.tags.value = tags.join(",");
+        document.querySelectorAll("[data-rm-tag]").forEach(b => b.addEventListener("click", () => {
+          tags = tags.filter(t => t !== b.dataset.rmTag); refreshTags();
+        }));
+      };
+      refreshTags();
+      const addTag = () => {
+        const v = document.getElementById("tagInput").value.trim();
+        if (v && !tags.includes(v)) tags.push(v);
+        document.getElementById("tagInput").value = "";
+        refreshTags();
+      };
+      document.getElementById("tagAdd").addEventListener("click", addTag);
+      document.getElementById("tagInput").addEventListener("keydown", e => { if (e.key==="Enter"){ e.preventDefault(); addTag(); }});
+
+      document.querySelectorAll("[data-set-rating]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          form.rating.value = btn.dataset.setRating;
+          document.querySelectorAll("#ratingChips .chip").forEach(c => c.classList.toggle("active", c.dataset.setRating === btn.dataset.setRating));
+        });
+      });
+
+      const fileInput = form.querySelector('input[type="file"]');
+      if (fileInput) {
+        fileInput.addEventListener("change", async () => {
+          const files = [...fileInput.files];
+          for (const f of files) {
+            const dataUrl = await readFile(f);
+            photos.push(dataUrl);
+          }
+          preview.innerHTML = photos.map(s=>`<img src="${s}" />`).join("");
+        });
+      }
+
+      const collect = () => {
+        const fd = new FormData(form);
+        const payload = { tags: [...tags], rating: String(fd.get("rating")), photos: [...photos] };
+        for (const [k,v] of fd.entries()) {
+          if (k === "photos" || k === "tags" || k === "rating") continue;
+          payload[k] = String(v);
+        }
+        return payload;
+      };
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const cat = form.dataset.cat;
+        const mode = form.dataset.mode;
+        const payload = collect();
+        payload.updated_at = new Date().toISOString();
+        if (mode === "edit") {
+          const id = form.dataset.id;
+          const idx = state.data.reviews[cat].findIndex(r => r.id === id);
+          if (idx >= 0) state.data.reviews[cat][idx] = { ...state.data.reviews[cat][idx], ...payload };
+          save(); toast("已儲存"); go(CATS[cat].path + "-detail", { id });
+        } else {
+          const id = uid();
+          state.data.reviews[cat].unshift({ id, created_at: new Date().toISOString(), ...payload });
+          if (form.dataset.draft) state.data.drafts = state.data.drafts.filter(d => d.id !== form.dataset.draft);
+          save(); toast("已發表"); go(CATS[cat].path + "-detail", { id });
+        }
+      });
+
+      const draftBtn = document.getElementById("saveDraft");
+      if (draftBtn) draftBtn.addEventListener("click", () => {
+        const cat = form.dataset.cat;
+        const payload = collect();
+        const row = {
+          id: form.dataset.draft || uid(),
+          category: cat,
+          title: payload.title || "未命名草稿",
+          payload,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        const i = state.data.drafts.findIndex(d => d.id === row.id);
+        if (i >= 0) state.data.drafts[i] = { ...state.data.drafts[i], ...row };
+        else state.data.drafts.unshift(row);
+        form.dataset.draft = row.id;
+        save(); toast("草稿已儲存");
+      });
+    }
+
+    function readFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    /* -------- Boot -------- */
+    document.getElementById("themeBtn").addEventListener("click", () => {
+      setTheme(document.documentElement.dataset.theme === "day" ? "night" : "day");
+    });
+    document.getElementById("authBtn").addEventListener("click", () => {
+      if (state.owner) {
+        state.owner = false;
+        sessionStorage.removeItem(PIN_KEY);
+        toast("已登出");
+        go("home");
+      } else go("login");
+    });
+    document.querySelectorAll(".header [data-go]").forEach((btn) => {
+      btn.addEventListener("click", () => go(btn.getAttribute("data-go")));
+    });
+
+    setTheme(localStorage.getItem(THEME_KEY) === "night" ? "night" : "day");
+    state.owner = sessionStorage.getItem(PIN_KEY) === "1";
+    render();
+  </script>
+</body>
+</html>
