@@ -1,4 +1,4 @@
--- 新增「活動評」：請在 Supabase → SQL Editor 整份貼上執行
+-- 新增「演出」：請在 Supabase → SQL Editor 整份貼上執行
 
 create table if not exists public.event_reviews (
   id uuid primary key default gen_random_uuid(),

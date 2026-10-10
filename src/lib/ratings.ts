@@ -44,7 +44,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   book: "書籍",
   movie: "電影",
   game: "遊戲",
-  event: "活動",
+  event: "演出",
 };
 
 export const CATEGORY_PATHS: Record<Category, string> = {

@@ -26,15 +26,15 @@ export default async function EventRatingPage({ params }: Props) {
   return (
     <>
       <div className="section-head">
-        <h1>活動評・{rating}</h1>
+        <h1>演出評賞・{rating}</h1>
         <Link href="/events" className="ghost-btn">
-          全部活動評
+          全部演出評賞
         </Link>
       </div>
       <RatingFilter category="event" active={rating} />
       <div className="review-list">
         {reviews.length === 0 && (
-          <p className="muted">這個評分下還沒有活動。</p>
+          <p className="muted">這個評分下還沒有演出。</p>
         )}
         {reviews.map((r) => (
           <Link key={r.id} href={`/events/${r.id}`} className="review-item">

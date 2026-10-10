@@ -51,7 +51,7 @@ export default async function HomePage() {
       </p>
       <h1 className="hero-brand">今天看書了嗎</h1>
       <p className="lead">
-        記錄讀過的書、看過的電影、玩過的遊戲和去過的活動。
+        記錄讀過的書、看過的電影、玩過的遊戲和看過的演出。
       </p>
 
       {/* <div className="actions home-actions">
@@ -65,7 +65,7 @@ export default async function HomePage() {
           遊戲
         </Link>
         <Link href="/events" className="ghost-btn">
-          活動
+          演出
         </Link>
       </div> */}
 

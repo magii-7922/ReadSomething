@@ -11,7 +11,7 @@ export const CHECKIN_LABELS: Record<Category, string> = {
   book: "看書",
   movie: "看電影",
   game: "玩遊戲",
-  event: "參加活動",
+  event: "觀看演出",
 };
 
 export const CHECKIN_COLORS: Record<Category, string> = {

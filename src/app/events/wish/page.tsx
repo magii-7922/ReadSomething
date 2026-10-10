@@ -23,7 +23,7 @@ export default async function EventWishPage() {
       <div className="section-head">
         <h1>最近有新音樂會嗎</h1>
         <Link href="/events" className="ghost-btn">
-          回到活動評
+          回到演出評賞
         </Link>
       </div>
       <WishList category="event" items={items} canEdit={canEdit} />

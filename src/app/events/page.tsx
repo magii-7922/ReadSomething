@@ -32,14 +32,14 @@ export default async function EventsPage({ searchParams }: Props) {
   return (
     <>
       <div className="section-head">
-        <h1>活動</h1>
+        <h1>演出</h1>
         <div className="actions">
           <Link href="/events/wish" className="ghost-btn">
             願望清單
           </Link>
           {canEdit && (
             <Link href="/events/new" className="primary-btn">
-              撰寫活動評
+              撰寫演出評賞
             </Link>
           )}
         </div>
@@ -50,7 +50,7 @@ export default async function EventsPage({ searchParams }: Props) {
       </Suspense>
       <div className="review-list">
         {reviews.length === 0 && (
-          <p className="muted">還沒有活動評。有去什麼有趣的活動嗎？</p>
+          <p className="muted">還沒有演出評賞。有去什麼有趣的演出嗎？</p>
         )}
         {reviews.map((r) => (
           <ReviewListItem

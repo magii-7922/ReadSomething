@@ -15,7 +15,7 @@ export async function SiteHeader() {
           <Link href="/books">書</Link>
           <Link href="/movies">電影/動畫</Link>
           <Link href="/games">遊戲</Link>
-          <Link href="/events">活動</Link>
+          <Link href="/events">演出</Link>
           {loggedIn && <Link href="/drafts">草稿箱</Link>}
           {loggedIn ? (
             <form action="/auth/signout" method="post">

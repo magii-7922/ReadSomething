@@ -175,10 +175,10 @@ export function EventReviewForm({ initial, mode, reviewId, draftId }: Props) {
   }
 
   return (
-    <WritingShell title={mode === "edit" ? "編輯活動評" : "撰寫活動評"}>
+    <WritingShell title={mode === "edit" ? "編輯演出評賞" : "撰寫演出評賞"}>
       <form className="review-form" onSubmit={onSubmit}>
         <label>
-          活動名
+          演出/表演
           <input value={title} onChange={(e) => setTitle(e.target.value)} required />
         </label>
         <label>
@@ -253,7 +253,7 @@ export function EventReviewForm({ initial, mode, reviewId, draftId }: Props) {
               <Image
                 key={src}
                 src={src}
-                alt="活動照片"
+                alt="演出表演照片"
                 width={200}
                 height={120}
                 unoptimized
@@ -265,7 +265,7 @@ export function EventReviewForm({ initial, mode, reviewId, draftId }: Props) {
         {info && <p className="form-message">{info}</p>}
         <div className="form-actions">
           <button type="submit" className="primary-btn" disabled={pending}>
-            {pending ? "儲存中…" : "儲存活動評"}
+            {pending ? "儲存中…" : "儲存演出評賞"}
           </button>
           {mode === "create" && (
             <button

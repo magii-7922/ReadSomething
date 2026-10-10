@@ -25,7 +25,7 @@ const accent = Chiron_GoRound_TC({
 
 export const metadata: Metadata = {
   title: "看閒書",
-  description: "個人書評、影評、遊戲評與活動評手賬站，含打卡表與願望清單。",
+  description: "個人書評、影評、遊戲評賞與演出評賞集合體，含打卡表與願望清單。",
   icons: {
     apple: "/apple-touch-icon.png",
   },
