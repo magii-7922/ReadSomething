@@ -9,7 +9,7 @@ export async function SiteHeader() {
     <header className="site-header">
       <div className="site-header-inner">
         <Link href="/" className="brand">
-          ˙Ⱉ˙多看書
+          ˙Ⱉ˙
         </Link>
         <nav className="site-nav" aria-label="主選單">
           <Link href="/books">書</Link>
