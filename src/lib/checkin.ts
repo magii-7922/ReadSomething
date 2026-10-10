@@ -15,10 +15,10 @@ export const CHECKIN_LABELS: Record<Category, string> = {
 };
 
 export const CHECKIN_COLORS: Record<Category, string> = {
-  book: "#1f6f6a",
-  movie: "#c45c6a",
-  game: "#5a8f4a",
-  event: "#c4a035",
+  book: "#6a6fd4",
+  movie: "#8b6bc9",
+  game: "#5b8fd9",
+  event: "#7a9be8",
 };
 
 export type CheckInMap = Record<string, Category[]>;
