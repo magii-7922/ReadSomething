@@ -283,6 +283,13 @@ html[data-theme="night"] .segmented button.active {
   font-weight: 600;
 }
 
+.month-grid,
+.year-dots-list {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 .month-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -306,6 +313,10 @@ html[data-theme="night"] .segmented button.active {
   background: transparent;
   color: inherit;
   padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
 }
 
 .day-cell.clickable {
@@ -364,7 +375,7 @@ html[data-theme="night"] .day-cell.checked:not(.pie) {
 
 .checkin-menu {
   position: fixed;
-  z-index: 50;
+  z-index: 1000;
   min-width: 168px;
   background: var(--panel);
   backdrop-filter: blur(6px);
@@ -375,6 +386,8 @@ html[data-theme="night"] .day-cell.checked:not(.pie) {
   padding: 0.45rem;
   display: grid;
   gap: 0.25rem;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .checkin-menu-date {
@@ -471,6 +484,10 @@ html[data-theme="night"] .day-cell.checked:not(.pie) {
   padding: 0;
   background: var(--line);
   cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
 }
 
 .year-dots .dot:disabled {

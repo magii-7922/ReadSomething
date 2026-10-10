@@ -2,12 +2,14 @@
 
 import {
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
   useTransition,
   type CSSProperties,
 } from "react";
+import { createPortal } from "react-dom";
 import {
   CHECKIN_CATEGORIES,
   CHECKIN_COLORS,
@@ -62,10 +64,16 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
   const [message, setMessage] = useState<string | null>(null);
   const [menuDate, setMenuDate] = useState<string | null>(null);
   const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
+  const [portalReady, setPortalReady] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const anchorRect = useRef<DOMRect | null>(null);
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longPressFired = useRef(false);
   const suppressClick = useRef(false);
+
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
 
   const today = toISODate(new Date());
   const year = cursor.getFullYear();
@@ -130,16 +138,42 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
     });
   }
 
-  function openMenu(date: string, clientX: number, clientY: number) {
-    if (!canEdit) return;
-    setMenuDate(date);
+  function placeMenuNear(rect: DOMRect, menuW = 176, menuH = 210) {
     const pad = 8;
-    const menuW = 180;
-    const menuH = 200;
-    const x = Math.min(clientX, window.innerWidth - menuW - pad);
-    const y = Math.min(clientY, window.innerHeight - menuH - pad);
-    setMenuPos({ x: Math.max(pad, x), y: Math.max(pad, y) });
+    const gap = 6;
+    // Prefer bottom-left of the day; flip to bottom-right if needed
+    let x = rect.left;
+    let y = rect.bottom + gap;
+    if (x + menuW > window.innerWidth - pad) {
+      x = rect.right - menuW;
+    }
+    x = Math.max(pad, Math.min(x, window.innerWidth - menuW - pad));
+    if (y + menuH > window.innerHeight - pad) {
+      y = Math.max(pad, rect.top - menuH - gap);
+    }
+    return { x, y };
   }
+
+  function openMenu(date: string, el: HTMLElement) {
+    if (!canEdit) return;
+    const rect = el.getBoundingClientRect();
+    anchorRect.current = rect;
+    setMenuDate(date);
+    setMenuPos(placeMenuNear(rect));
+  }
+
+  useLayoutEffect(() => {
+    if (!menuDate || !menuPos || !menuRef.current || !anchorRect.current) return;
+    const menuBox = menuRef.current.getBoundingClientRect();
+    const next = placeMenuNear(
+      anchorRect.current,
+      menuBox.width,
+      menuBox.height,
+    );
+    if (Math.abs(next.x - menuPos.x) > 1 || Math.abs(next.y - menuPos.y) > 1) {
+      setMenuPos(next);
+    }
+  }, [menuDate, menuPos]);
 
   function toggleCategory(date: string, category: Category) {
     if (!canEdit || !hasSupabaseConfig()) {
@@ -227,7 +261,7 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
           }
           // Desktop / mouse: click opens menu
           if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-            openMenu(date, e.clientX, e.clientY);
+            openMenu(date, e.currentTarget);
           }
         }}
         onContextMenu={(e) => {
@@ -237,11 +271,13 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
           if (!canEdit || e.button !== 0) return;
           longPressFired.current = false;
           clearLongPress();
-          const { clientX, clientY } = e;
+          const target = e.currentTarget;
           longPressTimer.current = setTimeout(() => {
             longPressFired.current = true;
             suppressClick.current = true;
-            openMenu(date, clientX, clientY);
+            // Clear any accidental text selection from long-press
+            window.getSelection()?.removeAllRanges();
+            openMenu(date, target);
             if (navigator.vibrate) navigator.vibrate(12);
           }, LONG_PRESS_MS);
         }}
@@ -363,34 +399,40 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
         </div>
       )}
 
-      {menuDate && menuPos && (
-        <div
-          ref={menuRef}
-          className="checkin-menu"
-          role="menu"
-          style={{ left: menuPos.x, top: menuPos.y }}
-        >
-          <p className="checkin-menu-date">{menuDate}</p>
-          {CHECKIN_CATEGORIES.map((cat) => {
-            const on = (checkIns[menuDate] ?? []).includes(cat);
-            return (
-              <button
-                key={cat}
-                type="button"
-                role="menuitemcheckbox"
-                aria-checked={on}
-                className={on ? "checkin-menu-item on" : "checkin-menu-item"}
-                disabled={pending}
-                onClick={() => toggleCategory(menuDate, cat)}
-              >
-                <i style={{ background: CHECKIN_COLORS[cat] }} />
-                <span>{CHECKIN_LABELS[cat]}</span>
-                <span className="checkin-menu-state">{on ? "已打" : "未打"}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {portalReady &&
+        menuDate &&
+        menuPos &&
+        createPortal(
+          <div
+            ref={menuRef}
+            className="checkin-menu"
+            role="menu"
+            style={{ left: menuPos.x, top: menuPos.y }}
+          >
+            <p className="checkin-menu-date">{menuDate}</p>
+            {CHECKIN_CATEGORIES.map((cat) => {
+              const on = (checkIns[menuDate] ?? []).includes(cat);
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  role="menuitemcheckbox"
+                  aria-checked={on}
+                  className={on ? "checkin-menu-item on" : "checkin-menu-item"}
+                  disabled={pending}
+                  onClick={() => toggleCategory(menuDate, cat)}
+                >
+                  <i style={{ background: CHECKIN_COLORS[cat] }} />
+                  <span>{CHECKIN_LABELS[cat]}</span>
+                  <span className="checkin-menu-state">
+                    {on ? "已打" : "未打"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>,
+          document.body,
+        )}
 
       {message && <p className="form-message">{message}</p>}
     </section>
