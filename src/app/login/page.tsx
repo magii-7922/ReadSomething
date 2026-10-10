@@ -35,7 +35,7 @@ export default function LoginPage() {
   return (
     <section className="panel login-panel">
       <h1 style={{ marginTop: 0, fontFamily: "var(--font-display)" }}>登入</h1>
-      <p className="muted">只有站長帳號可以編輯內容與打卡。</p>
+      <p className="muted">只有瑪姬大人可以編輯內容。</p>
       <form className="login-form" onSubmit={onSubmit}>
         <label>
           Email
