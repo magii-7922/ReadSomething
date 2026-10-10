@@ -8,7 +8,7 @@ html[data-theme="day"] {
   --panel: rgba(210, 208, 232, 0.78);
   --field: rgba(218, 220, 240, 0.78);
   --ink: #1e1f3d;
-  --muted: #4f5578;
+  --muted: #3a4061;
   --accent: #5a5fc4;
   --accent-soft: rgba(90, 95, 196, 0.18);
   --line: rgba(50, 55, 110, 0.22);
@@ -702,6 +702,11 @@ html[data-theme="night"] .primary-btn {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.home-actions {
+  margin-bottom: 1.5rem;
+  justify-content: center;
 }
 
 .rating-filter,

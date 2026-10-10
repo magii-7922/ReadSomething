@@ -54,7 +54,7 @@ export default async function HomePage() {
         記錄讀過的書、看過的電影、玩過的遊戲和去過的活動。
       </p>
 
-      <div className="actions" style={{ marginBottom: "1.5rem" }}>
+      <div className="actions home-actions">
         <Link href="/books" className="primary-btn">
           書
         </Link>

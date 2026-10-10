@@ -20,7 +20,7 @@ export async function SiteHeader() {
           {loggedIn ? (
             <form action="/auth/signout" method="post">
               <button type="submit" className="linkish">
-                登出
+                Magi
               </button>
             </form>
           ) : (
