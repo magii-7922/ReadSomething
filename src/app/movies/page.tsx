@@ -32,7 +32,7 @@ export default async function MoviesPage({ searchParams }: Props) {
   return (
     <>
       <div className="section-head">
-        <h1>影評</h1>
+        <h1>電影/動畫</h1>
         <div className="actions">
           <Link href="/movies/wish" className="ghost-btn">
             願望清單

@@ -32,7 +32,7 @@ export default async function EventsPage({ searchParams }: Props) {
   return (
     <>
       <div className="section-head">
-        <h1>活動評</h1>
+        <h1>活動</h1>
         <div className="actions">
           <Link href="/events/wish" className="ghost-btn">
             願望清單

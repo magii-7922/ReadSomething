@@ -47,25 +47,25 @@ export default async function HomePage() {
       )}
 
       <p className="muted" style={{ marginBottom: "0.2rem" }}>
-        個人評論手賬
+        隨便看看，隨便寫寫
       </p>
-      <h1 className="hero-brand">手賬評記</h1>
+      <h1 className="hero-brand">今天看書了嗎</h1>
       <p className="lead">
-        記錄讀過的書、看過的電影、玩過的遊戲與參加過的活動。首頁打卡可分色標記；願望清單右滑撰寫、左滑刪除。
+        記錄讀過的書、看過的電影、玩過的遊戲和去過的活動。
       </p>
 
       <div className="actions" style={{ marginBottom: "1.5rem" }}>
         <Link href="/books" className="primary-btn">
-          書評
+          書
         </Link>
         <Link href="/movies" className="ghost-btn">
-          影評
+          電影/動畫
         </Link>
         <Link href="/games" className="ghost-btn">
-          遊戲評
+          遊戲
         </Link>
         <Link href="/events" className="ghost-btn">
-          活動評
+          活動
         </Link>
       </div>
 

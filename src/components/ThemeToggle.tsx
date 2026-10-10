@@ -12,7 +12,7 @@ export function ThemeToggle() {
       className="theme-toggle"
       aria-label={theme === "day" ? "切換為夜模式" : "切換為日模式"}
     >
-      {theme === "day" ? "夜空" : "日間"}
+      {theme === "day" ? "Star" : "Sun"}
     </button>
   );
 }

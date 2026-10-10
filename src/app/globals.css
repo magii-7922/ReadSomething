@@ -2,19 +2,20 @@
 
 :root,
 html[data-theme="day"] {
-  --bg: #dfe8e2;
-  --bg-deep: #cfdcd4;
-  --paper: #f2f7f3;
-  --panel: rgba(242, 247, 243, 0.82);
-  --ink: #1b2e2a;
-  --muted: #5a726a;
-  --accent: #1f6f6a;
-  --accent-soft: rgba(31, 111, 106, 0.12);
-  --line: rgba(27, 46, 42, 0.14);
-  --danger: #a33b3b;
-  --checked: #1f6f6a;
-  --header-bg: rgba(242, 247, 243, 0.78);
-  --shadow: 0 18px 40px rgba(27, 46, 42, 0.08);
+  --bg: #f3e2b8;
+  --bg-deep: #e8c97a;
+  --paper: #fff6e0;
+  --panel: rgba(255, 246, 224, 0.78);
+  --field: rgba(255, 248, 230, 0.78);
+  --ink: #3a2a14;
+  --muted: #8a6e3a;
+  --accent: #c4922a;
+  --accent-soft: rgba(196, 146, 42, 0.16);
+  --line: rgba(90, 60, 20, 0.16);
+  --danger: #b84a3a;
+  --checked: #c4922a;
+  --header-bg: rgba(255, 244, 214, 0.72);
+  --shadow: 0 18px 40px rgba(120, 80, 20, 0.1);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
 }
@@ -24,6 +25,7 @@ html[data-theme="night"] {
   --bg-deep: #071018;
   --paper: rgba(16, 28, 46, 0.82);
   --panel: rgba(16, 28, 46, 0.78);
+  --field: rgba(16, 28, 46, 0.78);
   --ink: #e4eef7;
   --muted: #9bb0c4;
   --accent: #7eb8c9;
@@ -60,6 +62,13 @@ body {
   transition: background 0.4s ease, color 0.3s ease;
 }
 
+html[data-theme="day"] body {
+  background:
+    radial-gradient(ellipse at 72% 22%, #ffe08a 0%, transparent 42%),
+    radial-gradient(circle at 12% 88%, rgba(232, 180, 90, 0.35), transparent 45%),
+    linear-gradient(165deg, #f6e6b8, #e8c878 70%, #dfb85e);
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -67,8 +76,21 @@ a {
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
+}
+
+/* Site-wide translucent fields so atmosphere shows through */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
+textarea,
+select {
+  background: var(--field) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 4px;
 }
 
 .site-shell {
@@ -339,7 +361,9 @@ html[data-theme="night"] .day-cell.checked:not(.pie) {
   position: fixed;
   z-index: 50;
   min-width: 168px;
-  background: var(--paper);
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   border-radius: 8px;
@@ -634,11 +658,7 @@ html[data-theme="night"] .primary-btn {
 .review-form textarea,
 .login-form input {
   width: 100%;
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--paper) 70%, transparent);
-  color: var(--ink);
   padding: 0.65rem 0.75rem;
-  border-radius: 4px;
 }
 
 .section-head {
@@ -823,7 +843,8 @@ html[data-theme="night"] .tag.active {
 }
 
 .dot-grid-bg,
-.constellation-bg {
+.constellation-bg,
+.solar-system-bg {
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -849,20 +870,6 @@ html[data-theme="night"] .tag.active {
   padding: 1.4rem 1.3rem 1.8rem;
   border-radius: 2px;
   animation: page-in 0.45s ease;
-}
-
-html[data-theme="night"] .journal-page {
-  background: rgba(16, 28, 46, 0.78);
-}
-
-.journal-page .review-form input,
-.journal-page .review-form textarea {
-  background: rgba(12, 22, 36, 0.88);
-}
-
-html[data-theme="day"] .journal-page .review-form input,
-html[data-theme="day"] .journal-page .review-form textarea {
-  background: rgba(242, 247, 243, 0.92);
 }
 
 .journal-page h1 {

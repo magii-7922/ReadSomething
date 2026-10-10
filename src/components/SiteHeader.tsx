@@ -9,13 +9,13 @@ export async function SiteHeader() {
     <header className="site-header">
       <div className="site-header-inner">
         <Link href="/" className="brand">
-          手賬評記
+          🐸多看書
         </Link>
         <nav className="site-nav" aria-label="主選單">
-          <Link href="/books">書評</Link>
-          <Link href="/movies">影評</Link>
-          <Link href="/games">遊戲評</Link>
-          <Link href="/events">活動評</Link>
+          <Link href="/books">書</Link>
+          <Link href="/movies">電影/動畫</Link>
+          <Link href="/games">遊戲</Link>
+          <Link href="/events">活動</Link>
           {loggedIn && <Link href="/drafts">草稿箱</Link>}
           {loggedIn ? (
             <form action="/auth/signout" method="post">

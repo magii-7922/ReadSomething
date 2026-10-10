@@ -32,7 +32,7 @@ export default async function GamesPage({ searchParams }: Props) {
   return (
     <>
       <div className="section-head">
-        <h1>遊戲評</h1>
+        <h1>遊戲</h1>
         <div className="actions">
           <Link href="/games/wish" className="ghost-btn">
             願望清單

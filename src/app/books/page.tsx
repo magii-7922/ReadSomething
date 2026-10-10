@@ -32,7 +32,7 @@ export default async function BooksPage({ searchParams }: Props) {
   return (
     <>
       <div className="section-head">
-        <h1>書評</h1>
+        <h1>書</h1>
         <div className="actions">
           <Link href="/books/wish" className="ghost-btn">
             願望清單
