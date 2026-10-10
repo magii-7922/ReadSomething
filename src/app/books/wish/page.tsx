@@ -21,7 +21,7 @@ export default async function BookWishPage() {
   return (
     <>
       <div className="section-head">
-        <h1>書評願望清單</h1>
+        <h1>想看什麼書</h1>
         <Link href="/books" className="ghost-btn">
           回到書評
         </Link>

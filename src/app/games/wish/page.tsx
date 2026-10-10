@@ -21,7 +21,7 @@ export default async function GameWishPage() {
   return (
     <>
       <div className="section-head">
-        <h1>遊戲願望清單</h1>
+        <h1>快點打開steam</h1>
         <Link href="/games" className="ghost-btn">
           回到遊戲評
         </Link>

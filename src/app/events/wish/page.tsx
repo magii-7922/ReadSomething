@@ -21,7 +21,7 @@ export default async function EventWishPage() {
   return (
     <>
       <div className="section-head">
-        <h1>活動願望清單</h1>
+        <h1>最近有新音樂會嗎</h1>
         <Link href="/events" className="ghost-btn">
           回到活動評
         </Link>

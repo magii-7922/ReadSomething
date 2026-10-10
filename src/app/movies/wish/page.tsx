@@ -21,7 +21,7 @@ export default async function MovieWishPage() {
   return (
     <>
       <div className="section-head">
-        <h1>影評願望清單</h1>
+        <h1>有好看的電影嗎</h1>
         <Link href="/movies" className="ghost-btn">
           回到影評
         </Link>
