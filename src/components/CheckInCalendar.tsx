@@ -130,6 +130,13 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
   }, [menuDate]);
 
   function shift(delta: number) {
+    setMenuDate(null);
+    setMenuPos(null);
+    anchorRect.current = null;
+    // Drop focus so a day outline doesn't stick after month/year change
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     setCursor((prev) => {
       const next = new Date(prev);
       if (mode === "month") next.setMonth(next.getMonth() + delta);
@@ -160,6 +167,8 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
     anchorRect.current = rect;
     setMenuDate(date);
     setMenuPos(placeMenuNear(rect));
+    // Avoid a second “selected” ring from button focus next to today
+    el.blur();
   }
 
   useLayoutEffect(() => {
@@ -348,7 +357,7 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
           {monthCells.map((cell, i) =>
             cell.date ? (
               renderDayControl(
-                i,
+                cell.date,
                 cell.date,
                 cell.day,
                 [
@@ -361,7 +370,7 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
                   .join(" "),
               )
             ) : (
-              <div key={i} className="day-cell" />
+              <div key={`empty-${year}-${month}-${i}`} className="day-cell" />
             ),
           )}
         </div>
