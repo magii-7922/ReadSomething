@@ -50,7 +50,7 @@ export default async function EventsPage({ searchParams }: Props) {
       </Suspense>
       <div className="review-list">
         {reviews.length === 0 && (
-          <p className="muted">還沒有活動評。登入後可以開始寫第一篇。</p>
+          <p className="muted">還沒有活動評。有去什麼有趣的活動嗎？</p>
         )}
         {reviews.map((r) => (
           <ReviewListItem

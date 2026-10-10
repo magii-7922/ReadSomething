@@ -50,7 +50,7 @@ export default async function GamesPage({ searchParams }: Props) {
       </Suspense>
       <div className="review-list">
         {reviews.length === 0 && (
-          <p className="muted">還沒有遊戲評。登入後可以開始寫第一篇。</p>
+          <p className="muted">還沒有遊戲評價。快點開steam吧！</p>
         )}
         {reviews.map((r) => (
           <ReviewListItem

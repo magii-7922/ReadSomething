@@ -50,7 +50,7 @@ export default async function MoviesPage({ searchParams }: Props) {
       </Suspense>
       <div className="review-list">
         {reviews.length === 0 && (
-          <p className="muted">還沒有影評。登入後可以開始寫第一篇。</p>
+          <p className="muted">還沒有影評。最近有好看的電影嗎？</p>
         )}
         {reviews.map((r) => (
           <ReviewListItem

@@ -50,7 +50,7 @@ export default async function BooksPage({ searchParams }: Props) {
       </Suspense>
       <div className="review-list">
         {reviews.length === 0 && (
-          <p className="muted">還沒有書評。登入後可以開始寫第一篇。</p>
+          <p className="muted">還沒有書評。開始填坑了嗎？</p>
         )}
         {reviews.map((r) => (
           <ReviewListItem

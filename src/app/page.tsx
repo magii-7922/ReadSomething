@@ -54,9 +54,9 @@ export default async function HomePage() {
         記錄讀過的書、看過的電影、玩過的遊戲和去過的活動。
       </p>
 
-      <div className="actions home-actions">
+      {/* <div className="actions home-actions">
         <Link href="/books" className="primary-btn">
-          書
+          書1
         </Link>
         <Link href="/movies" className="ghost-btn">
           電影/動畫
@@ -67,7 +67,7 @@ export default async function HomePage() {
         <Link href="/events" className="ghost-btn">
           活動
         </Link>
-      </div>
+      </div> */}
 
       <div className="home-grid">
         <CheckInCalendar initialCheckIns={checkIns} canEdit={canEdit} />
