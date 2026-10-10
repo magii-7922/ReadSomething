@@ -88,13 +88,11 @@ select {
   font: inherit;
 }
 
-/* Site-wide translucent fields so atmosphere shows through (incl. iOS Safari) */
+/* Site-wide translucent fields so atmosphere shows through */
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
 textarea,
 select {
   background: var(--field) !important;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   color: var(--ink);
   border-radius: 4px;
@@ -114,8 +112,6 @@ select {
   position: sticky;
   top: 0;
   z-index: 20;
-  backdrop-filter: blur(14px) saturate(1.15);
-  -webkit-backdrop-filter: blur(14px) saturate(1.15);
   background: var(--header-bg);
   border-bottom: 1px solid var(--line);
 }
@@ -215,8 +211,6 @@ select {
 
 .panel {
   background: var(--panel);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   padding: 1.1rem 1.2rem 1.3rem;
@@ -402,8 +396,6 @@ html[data-theme="night"] .day-cell.checked:not(.pie) {
   z-index: 1000;
   min-width: 168px;
   background: var(--panel);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   border-radius: 8px;
@@ -798,8 +790,6 @@ html[data-theme="night"] .tag.active {
   display: block;
   padding: 1rem 1.1rem;
   background: var(--panel);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   border-radius: 4px;
   transition: transform 0.2s ease, border-color 0.2s ease;
@@ -882,8 +872,6 @@ html[data-theme="night"] .tag.active {
 
 .detail {
   background: var(--panel);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   padding: 1.4rem 1.3rem 1.6rem;
@@ -930,13 +918,10 @@ html[data-theme="night"] .tag.active {
   width: min(760px, 100%);
   margin: 0 auto;
   background: var(--panel);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   padding: 1.4rem 1.3rem 1.8rem;
   border-radius: 2px;
-  /* transform-only: Safari breaks backdrop-filter if opacity is animated */
   animation: page-in 0.45s ease;
   box-sizing: border-box;
 }
@@ -1033,25 +1018,57 @@ html[data-theme="night"] .tag.active {
   }
 }
 
-/* Mobile: keep glass panels/fields translucent like desktop */
-@media (max-width: 900px) {
+/*
+  Desktop: soft blur on top of translucent fills.
+  iOS/iPadOS Safari often composites backdrop-filter as solid — so touch
+  devices skip blur and rely on real alpha so the sky shows through.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .site-header,
   .panel,
   .journal-page,
   .detail,
   .review-item,
   .checkin-menu,
-  .login-panel {
-    background: var(--panel);
+  .login-panel,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
+  textarea,
+  select {
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
   }
 
+  .site-header {
+    backdrop-filter: blur(14px) saturate(1.15);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  html[data-theme="day"] {
+    --panel: rgba(210, 208, 232, 0.48);
+    --field: rgba(230, 232, 248, 0.42);
+    --header-bg: rgba(170, 175, 215, 0.5);
+  }
+
+  html[data-theme="night"] {
+    --panel: rgba(16, 28, 46, 0.38);
+    --field: rgba(20, 34, 56, 0.34);
+    --header-bg: rgba(11, 18, 32, 0.42);
+  }
+
+  .panel,
+  .journal-page,
+  .detail,
+  .review-item,
+  .checkin-menu,
+  .login-panel,
+  .site-header,
   input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
   textarea,
   select {
-    background: var(--field) !important;
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .review-form fieldset {
