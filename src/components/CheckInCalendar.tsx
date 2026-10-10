@@ -293,21 +293,21 @@ export function CheckInCalendar({ initialCheckIns, canEdit }: Props) {
   return (
     <section className="panel checkin-panel">
       <div className="panel-head">
-        <h2>打卡表</h2>
+        <h2>嚴肅監督</h2>
         <div className="segmented">
           <button
             type="button"
             className={mode === "month" ? "active" : ""}
             onClick={() => setMode("month")}
           >
-            一個月
+            Month
           </button>
           <button
             type="button"
             className={mode === "year" ? "active" : ""}
             onClick={() => setMode("year")}
           >
-            一整年
+            Year
           </button>
         </div>
       </div>

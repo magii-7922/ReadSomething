@@ -680,7 +680,29 @@ html[data-theme="night"] .primary-btn {
 .review-form textarea,
 .login-form input {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 0.65rem 0.75rem;
+  box-sizing: border-box;
+}
+
+/* iOS/Safari date fields have a large intrinsic min-width — clamp them */
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="time"],
+input[type="week"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  min-width: 0;
 }
 
 .section-head {
@@ -890,6 +912,8 @@ html[data-theme="night"] .tag.active {
   padding: 1.4rem 1.3rem 1.8rem;
   border-radius: 2px;
   animation: page-in 0.45s ease;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .journal-page h1 {
@@ -900,6 +924,8 @@ html[data-theme="night"] .tag.active {
 .review-form {
   display: grid;
   gap: 0.9rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .review-form label,
@@ -907,6 +933,8 @@ html[data-theme="night"] .tag.active {
   display: grid;
   gap: 0.35rem;
   font-size: 0.92rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .review-form fieldset {
